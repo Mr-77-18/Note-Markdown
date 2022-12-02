@@ -29,6 +29,46 @@ std::size_t CTextBlock::length()const
 	return textLength;
 }
 `````
+## 条款4：确定对象被使用前已被初始化
+1. 区分初始化和赋值
+```c++
+class A{
+	A(...)
+	:member initialization list//这里才是初始化{
+		...//这里是赋值了。没有想到吧
+	}
+}
+`````
+
+2. 内置类型的初始化和赋值的开销是一样的。内置类型的初始化必须**手工进行** 
+
+3. c++有着**十分固定** 的成员初始化次序:smile:,class的成员变量总是以声明的次序被初始化。（初值列当中的次序不重要，这点需要**注意哦** :bangbang:\
+4. non-local static **and**
+local static:fast_forward:**请以local static 对象替换non-local static对象** 
+```c++
+void function(void){
+	static ...//this is local static
+}
+class A{
+	static ...//this is local static
+};
+static ...//this is local static
+`````
+
+:bangbang:编译单元:bangbang::指产出单一目标文件的源码\
+对于同一个编译单元当中的non-local static member的初始化顺序c++没有进行保证。**解决办法** :fast_forward:
+```c++
+static ...//non-local static member
+	|
+	|
+	|变成
+void function(){
+	static ...//local static member
+}
+`````
+
+:bangbang:这里利用的规则是：对于local static对象会在"该函数被调用期间""首次遇上该对象之定义式"时被初始化。（:smile:这样就可以控制non-local static member的初始化咯:bangbang:）
+
 
 
 # 2.构造/析构/赋值运算
@@ -123,5 +163,8 @@ std::trl::shared_ptr<Widget>这个传参可能会被编译器改成这样的顺�
 :bangbang:如果priority出现异常，那么可能导致Widget的资源泄露。
 
 # 4.设计与声明
+:star::star:\
+:tada:舞台：让接口容易被正确使用，不容易被误用。\
+舞台上有：正确性，高效性，封装性，维护性，延展性，协议一致性
 ## 条款18：让接口容易被正确使用，不易被误用
 
