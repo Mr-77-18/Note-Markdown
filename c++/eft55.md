@@ -237,8 +237,34 @@ std::trl::shared_ptr<Widget>这个传参可能会被编译器改成这样的顺�
 :bangbang:如果priority出现异常，那么可能导致Widget的资源泄露。
 
 # 4.设计与声明
-:star::star:\
-:tada:舞台：让接口容易被正确使用，不容易被误用。\
-舞台上有：正确性，高效性，封装性，维护性，延展性，协议一致性
-## 条款18：让接口容易被正确使用，不易被误用
+<center>
 
+舞台：让接口容易被正确使用，不容易被误用。\
+舞台上有：正确性，高效性，封装性，维护性，延展性，协议一致性
+</center>
+
+## 条款18：让接口容易被正确使用，不易被误用
+:question:什么是DLL问题。shared_ptr又是怎么解决这个问题的？
+
+## 条款19: 设计class犹如设计type
+:star:这里提到的条款有（方便总结）：4,6,7,13,15,23,24,29,34,36,46
+
+## 条款20：宁以pass-by-reference-to-const替换pass-by-value
+一个合理的假设是：“pass-by-value并不昂贵”的唯一对象就是内置类型和STL的迭代器和函数对象。\
+:question:为什么STL...也是呢？
+`个人理解` :因为STL的设计者（设计class时）应该考虑了pass-by-value的性能问题。设计的比较好。
+
+
+## 条款21：必须返回对象时，别妄想返回其reference
+:bangbang:提示我们：不是return-by-reference就是好的\
+:star:我觉得这个条款应该说返回"新对象时"\
+在一个函数中，如果要返回新对象，这个新对象的创建方式有：
+1. 在stack中
+2. 在heap中(return-by-reference的话可能会造成内存泄露，即用户不会去delete)
+3. 在local static当中\
+不过以上三种都不是你return-by-reference的好理由。请以return-by-value的方式返回新对象
+
+## 条款22：将成员变量声明为private:
+## 条款23：宁以non-member , non-friend替换member函数
+<font color=red>成员函数的数量越少，类的弹性就越大</font>\
+non-member,non-friends函数的一个好处是可以分布在不同的头文件当中但却利用同一个命名空间这个技术使得可以操纵其它头文件当中的类的方法。标准库就是这样的。
