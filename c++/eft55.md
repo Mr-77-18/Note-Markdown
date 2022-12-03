@@ -29,6 +29,44 @@ std::size_t CTextBlock::length()const
 	return textLength;
 }
 `````
+`区分` 
+```c++
+const char* p;//char const* p
+char* const p;
+const char* const p;
+`````
+:star:const最具威力的用法是在函数声明时。
+1. const作用于函数返回参数或者参数上都可以避免粗心用户导致的错误。
+2. const作用于函数(**只能修饰成员函数** )本身`注意` 
+```c++
+class A{
+	...
+	void function(int length)const{...}//length并没有被修饰成const
+	...
+}
+`````
+对于const修饰的成员函数有一个好处如下：
+```c++
+class A{
+	public:
+		//错误的
+		int& function()const{
+			return length;
+		}
+		//正确的
+		const& int function()const{
+			return length;
+		}
+	private:
+		int length;
+}
+`````
+
+`解释` 即限制了返回要const（如果返回的是对象的成员的话）\
+:bangbang:对函数返回值是内置类型(不是引用哦)进行赋值是不合法的，但是对返回值是自定义的类确实合法的。(**只是合法，但这样做没有什么意义** )
+
+
+
 ## 条款4：确定对象被使用前已被初始化
 1. 区分初始化和赋值
 ```c++
@@ -74,7 +112,7 @@ void function(){
 # 2.构造/析构/赋值运算
 
 ## 条款5: 了解c++默默编写并调用哪些函数
-要理解以下几个问题\
+要理解以下几个问题
 1. 在什么情况下会产生default constructor or coping function
 2. 这些函数做了什么
 
@@ -156,7 +194,7 @@ void processWidget(std:tr1::shared_ptr<Widget> pw , int priority);
 //and then we use the function like that:
 processWidget(std::trl::shared_ptr<Widget>(new Widget) , priority());
 `````
-std::trl::shared_ptr<Widget>这个传参可能会被编译器改成这样的顺序：\
+std::trl::shared_ptr<Widget>这个传参可能会被编译器改成这样的顺序：
 1. new Widget
 2. priority()
 3. 最后调用tr1::shared_ptr构造函数\
