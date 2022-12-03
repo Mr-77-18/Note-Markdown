@@ -54,7 +54,7 @@ class A{
 			return length;
 		}
 		//正确的
-		const& int function()const{
+		const int& function()const{
 			return length;
 		}
 	private:
@@ -63,7 +63,37 @@ class A{
 `````
 
 `解释` 即限制了返回要const（如果返回的是对象的成员的话）\
-:bangbang:对函数返回值是内置类型(不是引用哦)进行赋值是不合法的，但是对返回值是自定义的类确实合法的。(**只是合法，但这样做没有什么意义** )
+:bangbang:对函数返回值是内置类型(不是引用哦)进行赋值是不合法的，但是对返回值是自定义的类确实合法的。(**只是合法，但这样做没有什么意义** )\
+:fast_forward:应用：
+```c++
+class TextBlock{
+	public:
+		...
+		//有两个版本1：一个const；2：一个non-const
+		//但这出现一个问题：即non-const和const中代码重复
+		const char& operator[](std::size_t position)const
+		{
+			...
+			...
+			return text[position];
+		}
+		char& operator[](std:size_t position)
+		{
+			...
+			...
+			return text[position];
+		}
+}
+`````
+
+`解决方法` :将常量性转除（casting away constness）
+
+```c++
+//这里只显示non-const []的改动
+char& operator[](std::size_t position){
+	return const_cast<char&>(static_cast<const TextBlock&>(*this)[position]);
+}
+`````
 
 
 
@@ -169,6 +199,9 @@ copy constructor当中调用copy assigment function\
 or\
 copy assigment function中调用copy constructor中的函数
 
+## 条款13：以对象管理资源
+
+
 # 3. 资源管理
 ## 条款14:在资源管理类中心小心coping行为
 初始化shared_ptr时可以指定一个**删除器** 这个删除器默认时delete掉动态分配的内存\
@@ -183,7 +216,10 @@ public :
 	}
 }
 `````
-## 条款16
+## 条款15: 在资源管理类中提供对原始资源的访问
+
+## 条款16: 成对使用new和delete是要采用相同形式
+
 ## 条款17: 以独立语句将newed对象置入智能指针。
 对于资源管理类的初始化要在单独一条语句当中进行\
 :no_entry_sign:例如：
