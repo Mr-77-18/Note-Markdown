@@ -268,3 +268,5 @@ std::trl::shared_ptr<Widget>这个传参可能会被编译器改成这样的顺�
 ## 条款23：宁以non-member , non-friend替换member函数
 <font color=red>成员函数的数量越少，类的弹性就越大</font>\
 non-member,non-friends函数的一个好处是可以分布在不同的头文件当中但却利用同一个命名空间这个技术使得可以操纵其它头文件当中的类的方法。标准库就是这样的。
+## 条款23： 若所有参数都要类型转换，请为此采用non-member函数
+<font color=red>只有当参数被列为参数列内，这个参数才是隐士类型转换的合格参与者</font>**我认为这也是本条款提出来的原因** <++>
