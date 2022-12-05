@@ -344,9 +344,25 @@ void function(...){
 # 6.继承与面向对象设计
 ## 条款32：确定你的public继承塑膜出is-a关系
 ## 条款33：避免遮掩继承而来的名称
+对于public继承：是is-a的关系，所以在derived class中不能覆盖掉base class的函数。\
+为了将被遮盖的名称再见天日，可以使用using声明式或转交函数（forwarding functions）:star:它们的区别是using将同名的所有函数重见天日，不管参数什么的，而转交函数则可以选择性的开放。这在private当中很有用
 ## 条款34: 区分接口继承和实现继承
+不同的写法有不同的暗示：**我们以base class中的内容讲解** 
+```c++
+class Shape{
+public:
+	virtual void draw() const = 0;//暗示derived class继承接口
+	virtual void error()(const std::string& msg);//暗示derived class继承接口额和缺省实现
+	int objectID() const;//暗示derived class继承接口和一份强制性实。这里可以延申一下：条款36：绝不重新定义继承而来的non-virtual函数
+	...
+};
+`````
+对于non-pure virtual function会有问题就是：derived class忘记去实现接口从而出现一些问题（如文中所提到的飞机的不同飞发问题）:fast_forward:解决方法是可以把它定义成pure virtual function，并且给一个缺省实现（虽然pure virtual function一般不提供实现）
+
+
 ## 条款35: 考虑virtual函数以外的其他选择
-## 条款36: 绝不重新定义继承而来的non-virtual函数 ## 条款37：绝不重新定义继承而来的缺省参数值
+## 条款36: 绝不重新定义继承而来的non-virtual函数 
+## 条款37：绝不重新定义继承而来的缺省参数值
 ## 条款38：通过复合塑膜出has-a或“根据某物实现出”
 ## 条款39：明智而审慎地使用private继承
 ## 条款40：明智而审慎地使用多重继承
