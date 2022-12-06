@@ -174,6 +174,25 @@ ra = b;
 2. 继承像Uncopyable这样的类（当base class没有对应的函数的时候,编译器就不会为derived class自动生成了）
 
 ## 条款7：为多态基类声明virtual函数
+讨论的例子：
+```c++
+class TimeKeeper{
+public:
+	TimeKeeper();
+	~TimeKeeper();
+	...
+};
+class AtomicClock : public TimeKeeper{...};
+class WaterClock : public TimeKeeper{...};
+class WristWatch : public TiemKeeper{...};
+
+//当以上述为基础，进行以下操作时，将会发生未定义行为
+TimeKeeper* ptk = getTimeKeeper();
+...
+delete ptk;//你不知道delete的是哪一个哦
+`````
+
+
 ## 条款8：别让异常逃离析构函数
 :star:两种解决方法：
 1. 吞下它，并做一些记录
@@ -360,11 +379,47 @@ public:
 对于non-pure virtual function会有问题就是：derived class忘记去实现接口从而出现一些问题（如文中所提到的飞机的不同飞发问题）:fast_forward:解决方法是可以把它定义成pure virtual function，并且给一个缺省实现（虽然pure virtual function一般不提供实现）
 
 
-## 条款35: 考虑virtual函数以外的其他选择
+## 条款35: 考虑virtual函数以外的其他选择 
+场景：不同的人物可能有着不同的方式计算它们的健康指数)\
+最常用的方法那当然是在base class当中设置一个virtual函数，:star::star:那么有什么其它方法吗？
+1. Non-virtual Interface(NVI)方法
+"何时调用virtual函数的权力保存在class当中" ; derived class保存定义virtual函数的权力
+2. 函数指针
+3. tr1::function(有点类似于泛化指针)完成的Strategy模式,其中还提到一个std::tr1::bind()的用法
+4. 古典的Strategy模式
+
+
 ## 条款36: 绝不重新定义继承而来的non-virtual函数 
+条款7是一个本条款的一个特里，都是在说不要重新定义继承而来的non-virtual函数
+
 ## 条款37：绝不重新定义继承而来的缺省参数值
+产生这个条款的原因是：对于virtual函数，缺省参数值是静态绑定的。所以你在derived class中重新设置缺省参数值是没有意义的。解决方法是使用替换策略（条款35有很多关于virtual函数的替换策略:如NVI技术）
 ## 条款38：通过复合塑膜出has-a或“根据某物实现出”
+:star::star:教会我们怎么区分is-a , has-a , is-implemented-in-terms-of(根据某物实现出)
 ## 条款39：明智而审慎地使用private继承
+private并不表示is-a,has-a的关系，它并不描述两个类之间的关系，它只是解决问题的一种实现上的技术。是is-implemented-in-terms-of。我们要明智的使用，在应该使用的收使用。\
+:fast_forward:考虑这样一个例子：一个class A想要借助现有class B的实现,一个可以的方法是借用条款38当中说到的复合之（is-implemented-in-terms-of）的方法。但是如果想要借助的函数是clas B当中的protected函数，以这种方法是无效的，因为class A访问不了。修然以public的方式继承的话可以访问这个protected成员函数，但由于class A和class B之间不是has-a的关系，所以不能采用这种方式。**最终** 便采用private继承的方法去实现is-implemeted-in-terms-of
+```c++
+class B{//现有的实现
+...
+protected:
+	void function(){...}
+}
+//想要借助class B实现class A一个方法是：复合
+class A{
+	B b;//但是以这种方式访问不了function()
+	...
+}
+//采用另外一种方式：
+class A : private B{
+...//这样就可以使用class B当中的function()函数了
+}
+`````
+关于继承当中的关系:
+![Image](https://github.com/Mr-77-18/Note-Markdown/tree/master/Pic/2.png) 
+
+
 ## 条款40：明智而审慎地使用多重继承
+
 
 
