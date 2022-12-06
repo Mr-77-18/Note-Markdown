@@ -416,8 +416,7 @@ class A : private B{
 }
 `````
 关于继承当中的关系:
-![Image](https://github.com/Mr-77-18/Note-Markdown/tree/master/Pic/2.png) 
-
+![Image](https://github.com/Mr-77-18/Note-Markdown/raw/master/Pic/2.png) 
 
 ## 条款40：明智而审慎地使用多重继承
 
