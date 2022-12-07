@@ -17,3 +17,25 @@
 2. git config --global credential.helper store\
 
 :arrow_forward:当输入一次用户名，密码之后，第二次就不用了。
+
+# Markdown-->Mermaid
+[学习使用mermaid](https://mermaid-js.github.io/mermaid/) 
+
+graph
+
+```mermaid
+graph TB
+ c1-->a2
+ subgraph one
+ a1-->a2
+ end
+ subgraph two
+ b1-->b2
+ end
+ subgraph three
+ c1-->c2
+ end
+ one --> two
+ three --> two
+ two --> c2
+```

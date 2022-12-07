@@ -168,7 +168,7 @@ int b = 77;
 ra = b;
 `````
 
-## 条款6: 若不想使用编译器自动生成的函数，就改明确拒绝
+## 条款6: 若不想使用编译器自动生成的函数，就该明确拒绝
 有两种方式拒绝之：
 1. 将函数在private中进行声明（并且不去定义它）,这种方式下友员类或者函数可以访问，但是因为没有定义它，所以会在链接的时候报错。
 2. 继承像Uncopyable这样的类（当base class没有对应的函数的时候,编译器就不会为derived class自动生成了）
@@ -419,6 +419,73 @@ class A : private B{
 ![Image](https://github.com/Mr-77-18/Note-Markdown/raw/master/Pic/2.png) 
 
 ## 条款40：明智而审慎地使用多重继承
+多重继承有它适用的场景，但遇到问题要所思考用单一继承去解决
+
+# 7. 模板与泛型编程
+## 条款41：了解隐式接口和编译期多态
+我们应该和面向对象的显示接口和运行期多态作比较\
+:fast_forward:对classes而言，显示接口以函数签名为中心，运行期多态以virtual函数为中心\
+```c++
+void function(Weight& w){
+...
+}
+//对于w,对它的限制就是它需要提供Weight的接口
+`````
+
+
+:fast_forward:对template参数而言，接口是隐式的，奠基于有效表达式。多态则通过template具限化和函数重载解析发生于编译期。
+```c++
+template<Class A>
+void function(A& a)
+{
+	if(a.size())
+	{
+		...	
+	}
+}
+对于a的限制你无法从A中推断出来，因为你也不知道A的具体类型，无法说a应该有哪些接口。
+所以只能从表达式a.size()入手，推出一些限制。这应该就是隐式接口的意思。
+`````
+
+## 条款42：了解typename的双重意义
+**typename必须作为嵌套从属类型名称的前缀词(这个名称要相依于某个template参数)** ，但是也有一个:bangbang:例外:bangbang:就是当嵌套类型在base classes list或者member initialization list当中时，不用加上typename。**理解很简单** 因为在这两个地方，它们只会被编译器解释为类型\
+
+所有缺省情况下嵌套从属名称不是类型
+所以以下代码是错误的
+```c++
+template <typename C>
+void print2nd(const C& container)
+{
+if(container.size() >= 2){
+	C::const_iterator iter(container.begin());//这是错误的
+	...
+}
+}
+`````
+## 条款43：学习处理模板化基类内的名称
+本条款的逻辑是这样的：
+```mermaid
+graph TB
+	subgraph 说明
+	A[给出一个例子]-->B[下结论:例子是错的]-->C[说它为什么是错的]-->D[有三个办法解决]
+	end
+	subgraph 对应说明
+	A-->A1;
+	B-->B1;
+	C-->C1;
+	D-->D1;
+	A1[xxx]-->B1[xxx]-->C1[有可能有特化版本的存在]-->D1[都是给编译器一个承诺任何特化版本都支持所提供的接口]
+	end
+`````
+
+<++>
+
+
+## 条款44：将与参数无关的代码抽离tmplates
+## 条款45：运用成员函数模板接受所有兼容类型
+## 条款46：需要类型转换时请为模板定义非成员函数
+## 条款47：请使用traits classes表现类型信息
+## 条款48：认识template元编程
 
 
 
