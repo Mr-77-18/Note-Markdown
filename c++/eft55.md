@@ -328,6 +328,56 @@ void function(){
 `对于向上转型` 则没有上面的限制
 
 ## 条款28：避免返回handles指向对象内部成分
+成员变量的封装性最多只等于“返回其reference”的函数的访问级别\
+:fast_forward:
+```c++
+class A{
+public:
+	int getlength()const
+	{
+		return length;
+	}
+private:
+	int length;
+}
+`````
+
+如上代码，虽然length被声明为public,但是getlength()是public的，所以成员变量length的访问级别是public的。\
+:fast_forward:解决问题的方法：如下：
+```c++
+class A{
+public:
+	const int getlength()const//在这个函数前面加上const
+	{
+		return length;
+	}
+private:
+	int length;
+}
+
+`````
+一个函数return-by-reference 或者 return-by-value都会出现相应的问题
+对于return-by-value中可能出现的问题这里做以下解释：
+```c++
+class A{
+public:
+	...
+	int& getlength(){
+		return length;
+	}
+	...
+private:
+		int length;
+}
+A function(...){...}//return-by-value
+
+//当使用者这样用的时候会出现问题：
+int& a  = &(function.getlength());
+
+`````
+
+问题在于function返回的对象在该语句结束后就被释放了，导致a悬挂。当然主要问题是又成员函数返回handler造成的。
+
 ## 条款29：为“异常安全”而努力是值得的
 **异常安全包括两个条件** 
 1. 不泄露任何资源:fast_forward:以对象管理资源
@@ -478,14 +528,20 @@ graph TB
 	end
 `````
 
-<++>
-
-
 ## 条款44：将与参数无关的代码抽离tmplates
+
+
 ## 条款45：运用成员函数模板接受所有兼容类型
 ## 条款46：需要类型转换时请为模板定义非成员函数
 ## 条款47：请使用traits classes表现类型信息
 ## 条款48：认识template元编程
+
+# 8. 定制new和delete
+## 条款49：了解new-handler的行为
+## 条款50：了解new和delete的合理替换时机
+## 条款51：编写new和delete时需固守常规
+## 条款52：写了placement new也要写placement delete
+
 
 
 
