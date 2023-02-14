@@ -18,6 +18,14 @@
 
 :arrow_forward:当输入一次用户名，密码之后，第二次就不用了。
 
+---
+how to **delete** file in github by using git:\
+example:delete file a.cpp
+1. git rm -r -n --cached a.cpp
+2. git rm -r --cached a.cpp
+3. git commit -m "[message]"
+4. git push master
+
 # Markdown-->Mermaid
 [学习使用mermaid](https://mermaid-js.github.io/mermaid/) 
 
