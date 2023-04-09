@@ -1,0 +1,19 @@
+{
+	  "name": "Arithmetic",
+		"rpc": [
+			{
+				      "name": "Add",
+							      "params": {"lhs": 1.0, "rhs": 1.0},
+										      "returns": 2.0
+													    
+			},
+			{
+				      "name": "Sub",
+							      "params": {"lhs": 1.0, "rhs": 1.0},
+										      "returns": 0.0
+													    
+			}
+			  
+		]
+		
+}
